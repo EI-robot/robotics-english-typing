@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#1c62d6">
+  <meta name="description" content="为机器人与运动控制工程师设计的28天英语打字课程。每天20至30分钟，学习单词、搭配与技术表达。">
+  <title>LexiLab 工程英语打字课</title>
+  <link rel="stylesheet" href="styles.css">
+  <script defer src="course.js"></script>
+  <script defer src="engine.js"></script>
+  <script defer src="app.js"></script>
+</head>
+<body>
+  <aside class="sidebar">
+    <a class="brand" href="#course" aria-label="LexiLab 课程首页"><span class="brand-mark">L<span>↵</span></span><span>LexiLab<small>工程英语打字课</small></span></a>
+    <div class="profile"><span class="avatar" aria-hidden="true">⌘</span><div><strong>你的英语实验室</strong><small>六级基础 · 机器人与控制</small></div></div>
+    <nav aria-label="主要导航">
+      <button class="nav-item active" data-view="course"><span aria-hidden="true">▦</span>学习路线</button>
+      <button class="nav-item" data-view="words"><span aria-hidden="true">▤</span>词汇手册<span class="nav-count">100</span></button>
+      <button class="nav-item" data-view="guide"><span aria-hidden="true">◷</span>学习方法</button>
+    </nav>
+    <div class="sidebar-bottom"><p>从看懂，到用得出来。</p><span>每天一小步，表达更准确。</span><div class="local-label"><span aria-hidden="true">◉</span> 进度保存在当前浏览器</div><div class="backup-actions"><button id="export" class="text-button">导出进度</button><button id="import" class="text-button">导入进度</button></div><input id="import-file" type="file" accept=".json,application/json" hidden></div>
+  </aside>
+  <div class="shell">
+    <header class="topbar"><span id="breadcrumb">我的课程 / 英语词汇</span><div class="top-controls"><label for="duration">每日计划</label><select id="duration"><option value="20">20 分钟</option><option value="25" selected>25 分钟</option><option value="30">30 分钟</option></select><span class="header-pill">4 周学习计划</span></div></header>
+    <div id="notice" class="notice" role="status" hidden></div>
+    <main id="main" tabindex="-1"></main>
+    <footer>为机器人与运动控制学习设计 · 例句为原创练习情境 · 先准确，再提速</footer>
+  </div>
+  <div id="toast" class="toast" role="status" hidden></div>
+</body>
+</html>
