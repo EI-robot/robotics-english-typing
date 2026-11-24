@@ -119,12 +119,42 @@ test('invalid backup preserves current progress, valid backup restores it',async
   assert.match(download.suggestedFilename(),/LexiLab-progress/);
   await context.close();
 });
-test('course contains 100 complete distinct targets with no future framework dependency',()=>{
-  assert.equal(course.days.length,28);
-  assert.equal(course.items.length,100);
-  assert.equal(new Set(course.items.map(i=>i.word)).size,100);
-  assert.equal(course.days.filter(d=>d.review).length,8);
+test('course contains 500 complete distinct targets across 140 lessons',()=>{
+  assert.equal(course.days.length,140);
+  assert.equal(course.items.length,500);
+  assert.equal(new Set(course.items.map(i=>i.word)).size,500);
+  assert.equal(course.days.filter(d=>d.review).length,40);
   for(const item of course.items){for(const field of ['word','pos','meaning','phrase','sentence','translation','note'])assert.ok(item[field],`${item.id} ${field}`);}
+});
+test('expanded course navigation reaches later technical lessons and restores their progress',async()=>{
+  const {page,context,errors}=await freshPage();
+  assert.equal(await page.locator('.nav-count').textContent(),'500');
+  await page.locator('#route-range').selectOption('4');
+  await page.getByRole('button',{name:'第134天 数据与抽样',exact:true}).click();
+  await page.locator('#typing').fill('sta');
+  await page.reload();
+  await page.getByRole('button',{name:'继续学习',exact:true}).click();
+  assert.equal(await page.locator('#typing').inputValue(),'sta');
+  assert.equal((await snapshot(page)).active.day,134);
+  await page.locator('[data-view="words"]').click();
+  await page.getByRole('searchbox').fill('domain randomization');
+  assert.ok(await page.locator('.word-row').count()>=1);
+  await page.getByRole('searchbox').fill('MPC');
+  assert.match(await page.locator('#word-list').textContent(),/model predictive control/);
+  assert.deepEqual(errors,[]);
+  await context.close();
+});
+test('a pre-expansion backup preserves learned cards, notes and the next lesson',async()=>{
+  const {page,context}=await freshPage();
+  const old={version:1,cards:{w1:{level:1,due:'2030-01-01',reviews:1,last:'2026-11-25'}},completed:{'1':{date:'2026-11-25',seconds:1500}},notes:{'1':'We identify the root cause.'},settings:{minutes:25},active:null};
+  page.once('dialog',dialog=>dialog.accept());
+  await page.locator('#import-file').setInputFiles({name:'old-progress.json',mimeType:'application/json',buffer:Buffer.from(JSON.stringify(old))});
+  await page.waitForFunction(()=>document.querySelector('.today .day-label').textContent.includes('第 2 天'));
+  await page.reload();
+  assert.equal(await page.locator('#notice').isVisible(),false);
+  assert.match(await page.locator('.today .day-label').textContent(),/第 2 天/);
+  assert.deepEqual(await snapshot(page),old);
+  await context.close();
 });
 test('desktop course and direct-file lessons load without uncaught errors',async()=>{
   const {page,context,errors}=await freshPage();

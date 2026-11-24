@@ -1,6 +1,8 @@
 # 工程英语打字教程
 
-这是为有大学英语六级经历、从事机器人与运动控制的学习者设计的四周教程。重点练习技术阅读中的高频词、常用搭配、工程表达与灵巧操作术语。每天安排 20 至 30 分钟，包含 20 天新词学习与 8 天复习应用，共 100 个目标词或短语。
+这是为有大学英语六级经历、从事机器人与运动控制的学习者设计的专业英语教程。重点练习技术阅读中的常用词、工程搭配与机器人控制术语。每天安排 20 至 30 分钟，课程共 **20 周、140 课、500 个不重复的目标词或短语**，包含 100 课新词与 40 课复习应用。每课最多新增 5 个目标项，可按实际复习负担延长完成时间。
+
+在线学习：[LexiLab 工程英语打字课](https://robotics-english-typing-15226.youngweineng.chatgpt.site)。在线版本保留原有访问权限；本地运行不需要额外账号。
 
 ## 开始学习
 
@@ -24,9 +26,9 @@ npm start
 
 这是默认 25 分钟分配。页面可选 20、25 或 30 分钟，并随时保存返回。题目提前打完时，剩余时间用于朗读、改写和自检；不需要再开一课。写作只统计词数，不自动判断语法、词汇用法或技术结论。
 
-前两天如果觉得目标词熟悉，重点练习搭配和自己的表达；无提示回忆率低于 60% 时，可以先练前 3 个词，保存后下次完成剩余内容。课程序号表示学习顺序，不要求连续 28 个自然日完成。
+前两天如果觉得目标词熟悉，重点练习搭配和自己的表达；无提示回忆率低于 60% 时，可以先练前 3 个词，保存后下次完成剩余内容。课程序号表示学习顺序，不要求连续 140 个自然日完成。首页每次显示 4 周，可用阶段选择器浏览全部课程。
 
-## 四周内容
+## 专业课程内容
 
 | 周次 | 主题 | 示例词汇 |
 | --- | --- | --- |
@@ -34,6 +36,24 @@ npm start
 | 第 2 周 | 调试、集成和工程取舍 | reproduce, discrepancy, robust, overhead, bottleneck |
 | 第 3 周 | 控制、轨迹和灵巧操作 | disturbance, saturation, reference frame, impedance, dexterity |
 | 第 4 周 | 论文阅读、实验与研究表达 | ablation, generalization, formulation, compensate, quantify |
+| 第 5 周 | Python 与程序表达 | scope, mutable, iterable, traceback, edge case |
+| 第 6 周 | C++ 与内存管理 | translation unit, lifetime, ownership, dangling pointer, polymorphism |
+| 第 7 周 | Linux Git 与构建工具 | race condition, mutex, staging area, linker, toolchain |
+| 第 8 周 | ROS 2 系统结构 | publisher, subscriber, callback group, lifecycle node, remapping |
+| 第 9 周 | ROS 2 通信与时序 | quality of service, durability, latency, jitter, transform tree |
+| 第 10 周 | 机器人几何与空间表示 | quaternion, homogeneous transformation, twist, wrench, configuration space |
+| 第 11 周 | 运动学与运动规划 | inverse kinematics, Jacobian, manipulability, collision avoidance, time parameterization |
+| 第 12 周 | 动力学与驱动系统 | mass matrix, generalized force, inverse dynamics, backlash, tendon |
+| 第 13 周 | 经典控制与稳定性 | integral windup, damping ratio, Lyapunov function, phase margin, gain margin |
+| 第 14 周 | 状态空间与最优控制 | controllability, observability, Kalman filter, Riccati equation, aliasing |
+| 第 15 周 | MPC 与轨迹优化 | receding horizon, warm start, slack variable, recursive feasibility, direct collocation |
+| 第 16 周 | 接触 抓持与灵巧手 | friction cone, force closure, grasp matrix, synergy, admittance control |
+| 第 17 周 | 物理仿真与数值设置 | time step, solver tolerance, collision geometry, contact impulse, real-time factor |
+| 第 18 周 | 强化学习核心词汇 | rollout, advantage, policy gradient, replay buffer, temporal difference |
+| 第 19 周 | 模仿学习与仿真迁移 | behavior cloning, covariate shift, domain randomization, system identification, privileged information |
+| 第 20 周 | 实验统计与数值计算 | confidence interval, automatic differentiation, conditioning, checkpoint, hyperparameter |
+
+每个词条包含词性、中文释义、常用搭配、原创专业例句、中文译文和用法提示。词库可按主题、英文、中文或搭配查找。单词与有独立专业含义的多词术语分开计为目标项，大小写与连字符变体不重复计数。没有将该词表包装为经过语料频次排名的统计词表。
 
 每周最后两天不加新词，使用已练词汇回忆与写作。不要把课程完成率、打字准确率直接当作词汇掌握率。
 
@@ -51,11 +71,13 @@ npm start
 
 每周自测时，不看例句，选 5 个词写 50 至 80 词，再朗读 60 秒。检查搭配是否自然、论证是否保留条件、句子的意思是否能解释。两次相隔至少 3 天都能无提示回忆，并能在新句子中使用，可以暂记为熟悉。
 
-本课程的 100 项中包含熟词与短语，不承诺词汇量净增加 100，也不把六级成绩换算为当前 CEFR 等级。所有工程例句均是原创的假想情境，并非真实实验结论。
+本课程的 500 项中包含熟词与专业短语，不承诺词汇量净增加 500，也不把六级成绩换算为当前 CEFR 等级。所有工程例句均是原创的假想情境，并非真实实验结论。专业语境参考见 [词汇选材与资料](docs/VOCABULARY_SOURCES.md)。
+
+扩展版本保留原来 100 个目标项的 ID 和前 28 课对应关系，已有学习记录可以继续使用。存档校验根据实际课程长度处理后续课程，备份格式和浏览器存储键保持兼容。
 
 ## 维护与验证
 
-界面与课程使用原生 HTML、CSS 和 JavaScript，没有运行时第三方依赖。`dist/course.js` 是课程内容；`dist/engine.js` 管理复习与存档校验；`dist/app.js` 管理学习交互。
+界面与课程使用原生 HTML、CSS 和 JavaScript，没有运行时第三方依赖。`dist/course.js` 保留最初课程并组装完整课程；`dist/professional-vocabulary.js` 包含新增 400 个专业目标项；`dist/engine.js` 管理复习与存档校验；`dist/app.js` 管理学习交互。课程长度和界面计数由数据生成。
 
 开发验证：
 

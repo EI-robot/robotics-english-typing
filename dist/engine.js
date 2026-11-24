@@ -48,17 +48,19 @@
   }
   const obj = value => value && typeof value==='object' && !Array.isArray(value);
   const safeNumber = value => typeof value==='number' && Number.isFinite(value) && value>=0;
-  function validateState(state, ids) {
+  function validateState(state, ids, dayCount=28) {
+    if (!Number.isInteger(dayCount) || dayCount<1) return false;
+    const validLesson = key => /^[1-9]\d*$/.test(key) && Number(key)<=dayCount;
     if (!obj(state) || state.version!==1 || !obj(state.cards) || !obj(state.completed) || !obj(state.notes) || !obj(state.settings)) return false;
     if (![20,25,30].includes(state.settings.minutes)) return false;
     if (state.active!==null) {
       const a=state.active;
-      if (!obj(a) || !Number.isInteger(a.day) || a.day<1 || a.day>28 || !Array.isArray(a.queue) || a.queue.length>100 || !Number.isInteger(a.index) || a.index<0 || a.index>a.queue.length || !safeNumber(a.seconds) || !safeNumber(a.typed) || !safeNumber(a.errors) || !safeNumber(a.attempts) || !safeNumber(a.recalls) || !safeNumber(a.correctRecalls) || typeof a.draft!=='string' || typeof a.input!=='string' || typeof a.assisted!=='boolean' || typeof a.missed!=='boolean' || typeof a.feedback!=='boolean') return false;
+      if (!obj(a) || !Number.isInteger(a.day) || a.day<1 || a.day>dayCount || !Array.isArray(a.queue) || a.queue.length>100 || !Number.isInteger(a.index) || a.index<0 || a.index>a.queue.length || !safeNumber(a.seconds) || !safeNumber(a.typed) || !safeNumber(a.errors) || !safeNumber(a.attempts) || !safeNumber(a.recalls) || !safeNumber(a.correctRecalls) || typeof a.draft!=='string' || typeof a.input!=='string' || typeof a.assisted!=='boolean' || typeof a.missed!=='boolean' || typeof a.feedback!=='boolean') return false;
       if (!a.queue.every(q=>obj(q) && ids.includes(q.itemId) && typeof q.target==='string' && q.target.length<500 && ['word','phrase','sentence','recall','review'].includes(q.kind) && typeof q.blind==='boolean')) return false;
     }
     if (!Object.entries(state.cards).every(([id,c])=>ids.includes(id) && obj(c) && validDate(c.due) && Number.isInteger(c.level) && c.level>=0 && c.level<=5 && Number.isInteger(c.reviews) && c.reviews>=0 && (!c.last || validDate(c.last)))) return false;
-    if (!Object.entries(state.completed).every(([day,c])=>/^(?:[1-9]|1\d|2[0-8])$/.test(day) && obj(c) && validDate(c.date) && safeNumber(c.seconds))) return false;
-    return Object.entries(state.notes).every(([day,note])=>/^(?:[1-9]|1\d|2[0-8])$/.test(day) && typeof note==='string' && note.length<=20000);
+    if (!Object.entries(state.completed).every(([day,c])=>validLesson(day) && obj(c) && validDate(c.date) && safeNumber(c.seconds))) return false;
+    return Object.entries(state.notes).every(([day,note])=>validLesson(day) && typeof note==='string' && note.length<=20000);
   }
   const api={normalize,matches,dateKey,addDays,gradeCard,dueCards,makeQueue,newState,validateState};
   if (typeof module!=='undefined' && module.exports) module.exports=api;

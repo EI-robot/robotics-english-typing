@@ -1,0 +1,502 @@
+[
+  {
+    "id": "w1",
+    "word": "identify",
+    "day": 1
+  },
+  {
+    "id": "w2",
+    "word": "specify",
+    "day": 1
+  },
+  {
+    "id": "w3",
+    "word": "clarify",
+    "day": 1
+  },
+  {
+    "id": "w4",
+    "word": "distinguish",
+    "day": 1
+  },
+  {
+    "id": "w5",
+    "word": "interpret",
+    "day": 1
+  },
+  {
+    "id": "w6",
+    "word": "consistent",
+    "day": 2
+  },
+  {
+    "id": "w7",
+    "word": "ambiguous",
+    "day": 2
+  },
+  {
+    "id": "w8",
+    "word": "explicit",
+    "day": 2
+  },
+  {
+    "id": "w9",
+    "word": "implicit",
+    "day": 2
+  },
+  {
+    "id": "w10",
+    "word": "relevant",
+    "day": 2
+  },
+  {
+    "id": "w11",
+    "word": "indicate",
+    "day": 3
+  },
+  {
+    "id": "w12",
+    "word": "suggest",
+    "day": 3
+  },
+  {
+    "id": "w13",
+    "word": "imply",
+    "day": 3
+  },
+  {
+    "id": "w14",
+    "word": "demonstrate",
+    "day": 3
+  },
+  {
+    "id": "w15",
+    "word": "justify",
+    "day": 3
+  },
+  {
+    "id": "w16",
+    "word": "assumption",
+    "day": 4
+  },
+  {
+    "id": "w17",
+    "word": "constraint",
+    "day": 4
+  },
+  {
+    "id": "w18",
+    "word": "objective",
+    "day": 4
+  },
+  {
+    "id": "w19",
+    "word": "criterion",
+    "day": 4
+  },
+  {
+    "id": "w20",
+    "word": "trade-off",
+    "day": 4
+  },
+  {
+    "id": "w21",
+    "word": "implement",
+    "day": 5
+  },
+  {
+    "id": "w22",
+    "word": "evaluate",
+    "day": 5
+  },
+  {
+    "id": "w23",
+    "word": "compare",
+    "day": 5
+  },
+  {
+    "id": "w24",
+    "word": "assess",
+    "day": 5
+  },
+  {
+    "id": "w25",
+    "word": "validate",
+    "day": 5
+  },
+  {
+    "id": "w26",
+    "word": "reproduce",
+    "day": 8
+  },
+  {
+    "id": "w27",
+    "word": "isolate",
+    "day": 8
+  },
+  {
+    "id": "w28",
+    "word": "inspect",
+    "day": 8
+  },
+  {
+    "id": "w29",
+    "word": "trace",
+    "day": 8
+  },
+  {
+    "id": "w30",
+    "word": "resolve",
+    "day": 8
+  },
+  {
+    "id": "w31",
+    "word": "discrepancy",
+    "day": 9
+  },
+  {
+    "id": "w32",
+    "word": "mismatch",
+    "day": 9
+  },
+  {
+    "id": "w33",
+    "word": "deviation",
+    "day": 9
+  },
+  {
+    "id": "w34",
+    "word": "anomaly",
+    "day": 9
+  },
+  {
+    "id": "w35",
+    "word": "failure",
+    "day": 9
+  },
+  {
+    "id": "w36",
+    "word": "configure",
+    "day": 10
+  },
+  {
+    "id": "w37",
+    "word": "initialize",
+    "day": 10
+  },
+  {
+    "id": "w38",
+    "word": "integrate",
+    "day": 10
+  },
+  {
+    "id": "w39",
+    "word": "deploy",
+    "day": 10
+  },
+  {
+    "id": "w40",
+    "word": "maintain",
+    "day": 10
+  },
+  {
+    "id": "w41",
+    "word": "feasible",
+    "day": 11
+  },
+  {
+    "id": "w42",
+    "word": "robust",
+    "day": 11
+  },
+  {
+    "id": "w43",
+    "word": "reliable",
+    "day": 11
+  },
+  {
+    "id": "w44",
+    "word": "scalable",
+    "day": 11
+  },
+  {
+    "id": "w45",
+    "word": "efficient",
+    "day": 11
+  },
+  {
+    "id": "w46",
+    "word": "dependency",
+    "day": 12
+  },
+  {
+    "id": "w47",
+    "word": "compatibility",
+    "day": 12
+  },
+  {
+    "id": "w48",
+    "word": "overhead",
+    "day": 12
+  },
+  {
+    "id": "w49",
+    "word": "bottleneck",
+    "day": 12
+  },
+  {
+    "id": "w50",
+    "word": "workaround",
+    "day": 12
+  },
+  {
+    "id": "w51",
+    "word": "feedback",
+    "day": 15
+  },
+  {
+    "id": "w52",
+    "word": "setpoint",
+    "day": 15
+  },
+  {
+    "id": "w53",
+    "word": "disturbance",
+    "day": 15
+  },
+  {
+    "id": "w54",
+    "word": "transient",
+    "day": 15
+  },
+  {
+    "id": "w55",
+    "word": "steady-state",
+    "day": 15
+  },
+  {
+    "id": "w56",
+    "word": "overshoot",
+    "day": 16
+  },
+  {
+    "id": "w57",
+    "word": "oscillation",
+    "day": 16
+  },
+  {
+    "id": "w58",
+    "word": "damping",
+    "day": 16
+  },
+  {
+    "id": "w59",
+    "word": "saturation",
+    "day": 16
+  },
+  {
+    "id": "w60",
+    "word": "convergence",
+    "day": 16
+  },
+  {
+    "id": "w61",
+    "word": "pose",
+    "day": 17
+  },
+  {
+    "id": "w62",
+    "word": "reference frame",
+    "day": 17
+  },
+  {
+    "id": "w63",
+    "word": "trajectory",
+    "day": 17
+  },
+  {
+    "id": "w64",
+    "word": "joint limit",
+    "day": 17
+  },
+  {
+    "id": "w65",
+    "word": "workspace",
+    "day": 17
+  },
+  {
+    "id": "w66",
+    "word": "compliance",
+    "day": 18
+  },
+  {
+    "id": "w67",
+    "word": "stiffness",
+    "day": 18
+  },
+  {
+    "id": "w68",
+    "word": "impedance",
+    "day": 18
+  },
+  {
+    "id": "w69",
+    "word": "contact",
+    "day": 18
+  },
+  {
+    "id": "w70",
+    "word": "slip",
+    "day": 18
+  },
+  {
+    "id": "w71",
+    "word": "grasp",
+    "day": 19
+  },
+  {
+    "id": "w72",
+    "word": "manipulation",
+    "day": 19
+  },
+  {
+    "id": "w73",
+    "word": "coordination",
+    "day": 19
+  },
+  {
+    "id": "w74",
+    "word": "dexterity",
+    "day": 19
+  },
+  {
+    "id": "w75",
+    "word": "actuator",
+    "day": 19
+  },
+  {
+    "id": "w76",
+    "word": "baseline",
+    "day": 22
+  },
+  {
+    "id": "w77",
+    "word": "benchmark",
+    "day": 22
+  },
+  {
+    "id": "w78",
+    "word": "metric",
+    "day": 22
+  },
+  {
+    "id": "w79",
+    "word": "ablation",
+    "day": 22
+  },
+  {
+    "id": "w80",
+    "word": "generalization",
+    "day": 22
+  },
+  {
+    "id": "w81",
+    "word": "formulation",
+    "day": 23
+  },
+  {
+    "id": "w82",
+    "word": "approximation",
+    "day": 23
+  },
+  {
+    "id": "w83",
+    "word": "uncertainty",
+    "day": 23
+  },
+  {
+    "id": "w84",
+    "word": "limitation",
+    "day": 23
+  },
+  {
+    "id": "w85",
+    "word": "applicability",
+    "day": 23
+  },
+  {
+    "id": "w86",
+    "word": "outperform",
+    "day": 24
+  },
+  {
+    "id": "w87",
+    "word": "deteriorate",
+    "day": 24
+  },
+  {
+    "id": "w88",
+    "word": "converge",
+    "day": 24
+  },
+  {
+    "id": "w89",
+    "word": "diverge",
+    "day": 24
+  },
+  {
+    "id": "w90",
+    "word": "compensate",
+    "day": 24
+  },
+  {
+    "id": "w91",
+    "word": "in terms of",
+    "day": 25
+  },
+  {
+    "id": "w92",
+    "word": "with respect to",
+    "day": 25
+  },
+  {
+    "id": "w93",
+    "word": "account for",
+    "day": 25
+  },
+  {
+    "id": "w94",
+    "word": "result in",
+    "day": 25
+  },
+  {
+    "id": "w95",
+    "word": "be subject to",
+    "day": 25
+  },
+  {
+    "id": "w96",
+    "word": "propose",
+    "day": 26
+  },
+  {
+    "id": "w97",
+    "word": "investigate",
+    "day": 26
+  },
+  {
+    "id": "w98",
+    "word": "establish",
+    "day": 26
+  },
+  {
+    "id": "w99",
+    "word": "quantify",
+    "day": 26
+  },
+  {
+    "id": "w100",
+    "word": "acknowledge",
+    "day": 26
+  }
+]

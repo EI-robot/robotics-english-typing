@@ -8,12 +8,12 @@
   const ids = D.items.map(item=>item.id);
   const escape = value => String(value).replace(/[&<>"']/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
   let state = E.newState(), storageLocked = false, corruptRaw = null;
-  let screen = 'course', paused = false, lastActivity = Date.now(), toastTimeout;
+  let screen = 'course', paused = false, lastActivity = Date.now(), toastTimeout, routeRange=null;
   try {
     const raw=localStorage.getItem(KEY);
     if (raw) {
       const loaded=JSON.parse(raw);
-      if (!E.validateState(loaded,ids)) throw new Error('Invalid progress');
+      if (!E.validateState(loaded,ids,D.days.length)) throw new Error('Invalid progress');
       state=loaded;
     }
   } catch (error) {
@@ -29,7 +29,7 @@
     catch (_) { storageLocked=true; notice('浏览器未能保存进度，请使用“导出进度”保存备份。本次学习仍可继续。'); }
   }
   const dayOf = number => D.days.find(day=>day.number===Number(number));
-  const nextDay = () => D.days.find(day=>!state.completed[day.number]) || D.days[27];
+  const nextDay = () => D.days.find(day=>!state.completed[day.number]) || D.days[D.days.length-1];
   const due = () => E.dueCards(state.cards,E.dateKey(),1000);
   const clock = seconds => `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(Math.floor(seconds%60)).padStart(2,'0')}`;
   const active = () => state.active;
@@ -49,13 +49,16 @@
     const day=active() ? dayOf(active().day) : nextDay();
     const learned=Object.keys(state.cards).length, completed=Object.keys(state.completed).length;
     const dueCount=due().length;
-    $('#main').innerHTML=`<section class="hero"><div><div class="eyebrow">把英语练进你的工程日常</div><h1>打出单词，也记住用法。</h1><p>从技术文档到灵巧手研究，把词汇放回熟悉的场景。<br>每天 ${state.settings.minutes} 分钟，练习拼写、搭配和准确表达。</p><div class="tags"><span class="tag">六级基础进阶</span><span class="tag">100 个词与短语</span><span class="tag">无需注册</span></div></div>${robot}</section>
-    <div class="stats"><div class="stat"><span>课程进度</span><strong>${completed}<small>/ 28 天</small></strong></div><div class="stat"><span>已练词汇</span><strong>${learned}<small>/ 100</small></strong></div><div class="stat"><span>到期复习</span><strong>${dueCount}<small>个词</small></strong></div></div>
+    const range=routeRange ?? Math.floor((day.week-1)/4);
+    $('#main').innerHTML=`<section class="hero"><div><div class="eyebrow">把英语练进你的工程日常</div><h1>打出单词，也记住用法。</h1><p>从技术文档到灵巧手研究，把词汇放回熟悉的场景。<br>每天 ${state.settings.minutes} 分钟，练习拼写、搭配和准确表达。</p><div class="tags"><span class="tag">六级基础进阶</span><span class="tag">${D.items.length} 个词与短语</span><span class="tag">专业场景学习</span></div></div>${robot}</section>
+    <div class="stats"><div class="stat"><span>课程进度</span><strong>${completed}<small>/ ${D.days.length} 课</small></strong></div><div class="stat"><span>已练词汇</span><strong>${learned}<small>/ ${D.items.length}</small></strong></div><div class="stat"><span>到期复习</span><strong>${dueCount}<small>个词</small></strong></div></div>
     <div class="section-heading"><h2>${active() ? '接着上次的进度' : '今天，从这里开始'}</h2>${dueCount?'<button class="text-button" data-action="review">只复习到期词</button>':'<span>按自己的节奏完成</span>'}</div>
     <section class="today"><div><div class="day-label">第 ${day.number} 天 · ${day.review?'复习与应用':'5 个目标词'} · 约 ${state.settings.minutes} 分钟</div><h3>${escape(day.title)}</h3><p>${day.review?'回忆本周词汇，在自己的表达里重新使用。':'单词打字 → 常用搭配 → 情境例句 → 无提示回忆'}</p><div class="word-preview" lang="en">${day.review?'Recall. Connect. Put it into words.':day.items.map(i=>escape(i.word)).join(' / ')}</div></div><button class="primary" data-action="start" data-day="${day.number}">${active()?'继续学习':'开始今日学习'}</button></section>
-    <div class="section-heading"><h2>你的四周学习路线</h2><span>20 天新词 + 8 天复习与应用</span></div>
-    <div class="weekly-grid">${D.weeks.map((week,index)=>`<section class="week" style="--week-color:${week.color}"><div class="week-top"><span class="week-label">第 ${index+1} 周</span><span class="week-total">${D.days.filter(d=>d.week===index+1&&state.completed[d.number]).length} / 7 天</span></div><h3>${week.title}</h3><p>${week.subtitle}</p><div class="days">${D.days.filter(d=>d.week===index+1).map(d=>`<button class="day-button ${d.review?'review':''} ${state.completed[d.number]?'done':''} ${d.number===day.number?'current':''}" data-action="start" data-day="${d.number}" title="${escape(d.title)}" aria-label="第${d.number}天 ${escape(d.title)}${state.completed[d.number]?' 已完成':''}"><span>${state.completed[d.number]?'✓':d.number}</span><small>${d.review?'复习':'学习'}</small></button>`).join('')}</div></section>`).join('')}</div>
+    <div class="section-heading"><h2>专业英语学习路线</h2><label class="route-label" for="route-range">查看阶段 <select id="route-range" aria-label="课程阶段">${Array.from({length:Math.ceil(D.weeks.length/4)},(_,i)=>`<option value="${i}" ${i===range?'selected':''}>第 ${i*4+1} 至 ${Math.min(i*4+4,D.weeks.length)} 周</option>`).join('')}</select></label></div>
+    <p class="route-overview">${D.weeks.length} 周 · ${D.days.filter(d=>!d.review).length} 课新词 · ${D.days.filter(d=>d.review).length} 课复习与应用。每课 5 个目标词，可随时暂停。</p>
+    <div class="weekly-grid">${D.weeks.slice(range*4,range*4+4).map((week,offset)=>{const index=range*4+offset;return `<section class="week" style="--week-color:${week.color}"><div class="week-top"><span class="week-label">第 ${index+1} 周</span><span class="week-total">${D.days.filter(d=>d.week===index+1&&state.completed[d.number]).length} / 7 课</span></div><h3>${week.title}</h3><p>${week.subtitle}</p><div class="days">${D.days.filter(d=>d.week===index+1).map(d=>`<button class="day-button ${d.review?'review':''} ${state.completed[d.number]?'done':''} ${d.number===day.number?'current':''}" data-action="start" data-day="${d.number}" title="${escape(d.title)}" aria-label="第${d.number}天 ${escape(d.title)}${state.completed[d.number]?' 已完成':''}"><span>${state.completed[d.number]?'✓':d.number}</span><small>${d.review?'复习':'学习'}</small></button>`).join('')}</div></section>`;}).join('')}</div>
     <p class="route-note">先看着打，再遮住英文回忆。每周最后两天不加新词；漏学一天，接着学即可。</p><div class="backup-actions mobile-backup"><button class="text-button" data-action="export">导出进度</button><button class="text-button" data-action="import">导入进度</button></div>`;
+    $('#route-range').addEventListener('change',event=>{routeRange=Number(event.target.value);renderCourse();});
   }
   function startLesson(number) {
     if (active() && active().day===Number(number)) { paused=false; lastActivity=Date.now(); setView('practice'); return; }
@@ -191,17 +194,17 @@
     lastActivity=Date.now();window.scrollTo(0,0);
   }
   function renderWords() {
-    $('#main').innerHTML=`<div class="eyebrow">查含义，也查怎么用</div><h1>你的词汇手册</h1><p class="context-meaning">100 个词与短语。先按语境理解，再练习搭配；“已练”表示做过回忆练习，尚不等于掌握。</p><div class="search-row"><input id="word-search" type="search" aria-label="搜索单词、中文或搭配" placeholder="搜索单词、中文或搭配"><select id="week-filter" aria-label="按周筛选"><option value="all">全部主题</option>${D.weeks.map((w,i)=>`<option value="${i+1}">第 ${i+1} 周 · ${w.subtitle}</option>`).join('')}</select><select id="status-filter" aria-label="按复习状态筛选"><option value="all">全部词汇</option><option value="due">到期复习</option><option value="learned">已经练过</option><option value="new">尚未练习</option></select></div><div class="word-list" id="word-list"></div>`;
+    $('#main').innerHTML=`<div class="eyebrow">查含义，也查怎么用</div><h1>你的词汇手册</h1><p class="context-meaning">${D.items.length} 个词与短语，涵盖工程、ROS 2、机器人、控制、仿真和学习。先按语境理解，再练习搭配；“已练”表示做过回忆练习，尚不等于掌握。</p><div class="search-row"><input id="word-search" type="search" aria-label="搜索单词、中文或搭配" placeholder="搜索单词、中文或搭配"><select id="week-filter" aria-label="按周筛选"><option value="all">全部主题</option>${D.weeks.map((w,i)=>`<option value="${i+1}">第 ${i+1} 周 · ${w.title}</option>`).join('')}</select><select id="status-filter" aria-label="按复习状态筛选"><option value="all">全部词汇</option><option value="due">到期复习</option><option value="learned">已经练过</option><option value="new">尚未练习</option></select></div><div class="word-list" id="word-list"></div>`;
     $('#word-search').addEventListener('input',filterWords);$('#week-filter').addEventListener('change',filterWords);$('#status-filter').addEventListener('change',filterWords);filterWords();
   }
   function filterWords() {
     const query=$('#word-search').value.trim().toLowerCase(), week=$('#week-filter').value, status=$('#status-filter').value;
     const today=E.dateKey();
-    const filtered=D.items.filter(i=>(week==='all'||i.week===Number(week))&&(`${i.word} ${i.meaning} ${i.phrase}`).toLowerCase().includes(query)&&(status==='all'||status==='due'&&state.cards[i.id]?.due<=today||status==='learned'&&state.cards[i.id]||status==='new'&&!state.cards[i.id]));
+    const filtered=D.items.filter(i=>(week==='all'||i.week===Number(week))&&(`${i.word} ${i.meaning} ${i.phrase} ${i.note} ${D.weeks[i.week-1].title}`).toLowerCase().includes(query)&&(status==='all'||status==='due'&&state.cards[i.id]?.due<=today||status==='learned'&&state.cards[i.id]||status==='new'&&!state.cards[i.id]));
     $('#word-list').innerHTML=filtered.length?filtered.map(item=>`<article class="word-row"><div class="word-head"><small>第 ${item.week} 周 · 第 ${item.day} 天 · ${item.pos}</small><strong lang="en">${escape(item.word)}</strong><p>${escape(item.meaning)}</p>${state.cards[item.id]?`<span class="word-badge">${state.cards[item.id].due<=today?'待复习':'下次 '+state.cards[item.id].due}</span>`:''}</div><div class="word-detail"><p class="word-phrase" lang="en">${escape(item.phrase)}</p><p lang="en">${escape(item.sentence)}</p><p>${escape(item.translation)}</p><small>${escape(item.note)}</small></div></article>`).join(''):'<p class="empty">没有匹配的词，试试其他关键词或筛选条件。</p>';
   }
   function renderGuide() {
-    $('#main').innerHTML=`<div class="guide"><div class="eyebrow">让每天的练习真正可持续</div><h1>每天 20 至 30 分钟，怎么学？</h1><section><h2>先从你的实际能力出发</h2><p>六级经历说明你有英语学习基础，但不能直接确定当前阅读、听力或主动表达水平。本课从熟词技术义、高频搭配和专业语境入手。如果前两天无提示回忆率超过 90%，把重点放在句子改写与限时表达；若低于 60%，先学 3 个词，剩余内容保留到下一次。</p><p>每课可以随时保存返回。20 分钟时减少扩展朗读，30 分钟时增加自己的表达，不用为了进度连学两课。</p></section><section><h2>25 分钟的标准节奏</h2><table class="schedule"><tbody><tr><td>5 分钟</td><td>复习到期词。先回忆，想不起来再看提示。</td></tr><tr><td>7 分钟</td><td>学习最多 5 个词，理解含义与搭配，逐字输入。</td></tr><tr><td>7 分钟</td><td>打出情境例句，读懂后改写其中一两句。</td></tr><tr><td>4 分钟</td><td>遮住英文回忆目标词，区分认识与会用。</td></tr><tr><td>2 分钟</td><td>写几句自己的表达，记录一项容易混淆的用法。</td></tr></tbody></table><p>时间是练习分配建议。计时器记录页面可见且最近 90 秒有操作时的时长；暂停、离开页面或长时间无操作不会持续计时。打完题目不一定等于用满时间，剩余时间用于朗读和改写。</p></section><section><h2>为什么不能只看着打</h2><p>看着英文输入训练拼写和键盘动作；遮住英文后从中文提取目标词，才考察回忆。因此，照打不增加记忆等级。每个新词先练单词、搭配与句子，最后再进入无提示回忆。</p><p>回忆答错或查看提示，会安排到明天再练。成功回忆后，间隔依次为 1、3、7、14、30 天；同一天重复成功不继续拉长间隔。这是便于执行的规则，不是对个人遗忘曲线的精确测量。</p><p>新词课先复习最多 10 个到期词；到期超过 20 个时会建议先完成最多 15 个复习。复习日从已练词中选最多 15 个，不额外添加新词。没按时学不必补双倍，接着完成下一课即可。</p></section><section><h2>每周检验会不会用</h2><p>每周最后两天用于复习与写作。自测时不看例句，选 5 个词写 50 至 80 词并朗读 60 秒。两次相隔至少 3 天的练习都能无提示回忆，且能在新句子中正确使用，可暂记为熟悉；不以一次打对判断掌握。</p><p>课程共有 100 个目标项，部分是熟词或短语。完成 100 项不意味着词汇量必然增加 100，也不等于英语等级发生提升。</p></section><section><h2>保存与使用</h2><p>课程无需账号。进度保存在当前浏览器，包含打字位置、词汇复习日期和写作。更换浏览器、网址或清理浏览数据后，记录不会自动同步；每周导出一次 JSON 备份，需要时导入。请只在一个标签页学习，避免多页同时覆盖进度。</p><p>发音使用浏览器及系统的英语语音，是否可用取决于设备；没有英语语音也可以完成打字练习。课程例句描述的是假想场景，实际机器人控制与实验结论需要另外验证。</p><div class="backup-actions"><button class="text-button" data-action="export">导出进度</button><button class="text-button" data-action="import">导入进度</button></div></section><section><h2>设计参考</h2><p>交互参考 <a href="https://www.edclub.com/zh/library/%E4%B9%A0%E5%AD%97%E4%B8%9B%E6%9E%97" target="_blank" rel="noreferrer">edclub 习字丛林</a>的课程分段与即时反馈，练习内容与界面独立制作。</p><p>把词汇放入有意义的场景、学习搭配并分散复习，参考 <a href="https://www.britishcouncil.org/voices-magazine/ten-ways-learn-new-words-language-learner" target="_blank" rel="noreferrer">British Council 的词汇学习建议</a>；后续主动回忆与重复使用，参考 <a href="https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/remembering-vocabulary" target="_blank" rel="noreferrer">Remembering vocabulary</a>。每日词量、时间与复习间隔是本课的可调整安排。</p></section></div>`;
+    $('#main').innerHTML=`<div class="guide"><div class="eyebrow">让每天的练习真正可持续</div><h1>每天 20 至 30 分钟，怎么学？</h1><section><h2>先从你的实际能力出发</h2><p>六级经历说明你有英语学习基础，但不能直接确定当前阅读、听力或主动表达水平。本课从熟词技术义、高频搭配和专业语境入手。如果前两天无提示回忆率超过 90%，把重点放在句子改写与限时表达；若低于 60%，先学 3 个词，剩余内容保留到下一次。</p><p>每课可以随时保存返回。20 分钟时减少扩展朗读，30 分钟时增加自己的表达，不用为了进度连学两课。</p></section><section><h2>25 分钟的标准节奏</h2><table class="schedule"><tbody><tr><td>5 分钟</td><td>复习到期词。先回忆，想不起来再看提示。</td></tr><tr><td>7 分钟</td><td>学习最多 5 个词，理解含义与搭配，逐字输入。</td></tr><tr><td>7 分钟</td><td>打出情境例句，读懂后改写其中一两句。</td></tr><tr><td>4 分钟</td><td>遮住英文回忆目标词，区分认识与会用。</td></tr><tr><td>2 分钟</td><td>写几句自己的表达，记录一项容易混淆的用法。</td></tr></tbody></table><p>时间是练习分配建议。计时器记录页面可见且最近 90 秒有操作时的时长；暂停、离开页面或长时间无操作不会持续计时。打完题目不一定等于用满时间，剩余时间用于朗读和改写。</p></section><section><h2>为什么不能只看着打</h2><p>看着英文输入训练拼写和键盘动作；遮住英文后从中文提取目标词，才考察回忆。因此，照打不增加记忆等级。每个新词先练单词、搭配与句子，最后再进入无提示回忆。</p><p>回忆答错或查看提示，会安排到明天再练。成功回忆后，间隔依次为 1、3、7、14、30 天；同一天重复成功不继续拉长间隔。这是便于执行的规则，不是对个人遗忘曲线的精确测量。</p><p>新词课先复习最多 10 个到期词；到期超过 20 个时会建议先完成最多 15 个复习。复习日从已练词中选最多 15 个，不额外添加新词。没按时学不必补双倍，接着完成下一课即可。</p></section><section><h2>每周检验会不会用</h2><p>每周最后两天用于复习与写作。自测时不看例句，选 5 个词写 50 至 80 词并朗读 60 秒。两次相隔至少 3 天的练习都能无提示回忆，且能在新句子中正确使用，可暂记为熟悉；不以一次打对判断掌握。</p><p>课程共有 ${D.items.length} 个目标项，分为 ${D.weeks.length} 周、${D.days.length} 课，涵盖工程、机器人与学习控制。部分是熟词或专业短语，完成课程不等于每个词都已熟练掌握。</p></section><section><h2>保存与使用</h2><p>课程无需账号。进度保存在当前浏览器，包含打字位置、词汇复习日期和写作。更换浏览器、网址或清理浏览数据后，记录不会自动同步；每周导出一次 JSON 备份，需要时导入。请只在一个标签页学习，避免多页同时覆盖进度。</p><p>发音使用浏览器及系统的英语语音，是否可用取决于设备；没有英语语音也可以完成打字练习。课程例句描述的是假想场景，实际机器人控制与实验结论需要另外验证。</p><div class="backup-actions"><button class="text-button" data-action="export">导出进度</button><button class="text-button" data-action="import">导入进度</button></div></section><section><h2>设计参考</h2><p>交互参考 <a href="https://www.edclub.com/zh/library/%E4%B9%A0%E5%AD%97%E4%B8%9B%E6%9E%97" target="_blank" rel="noreferrer">edclub 习字丛林</a>的课程分段与即时反馈，练习内容与界面独立制作。</p><p>把词汇放入有意义的场景、学习搭配并分散复习，参考 <a href="https://www.britishcouncil.org/voices-magazine/ten-ways-learn-new-words-language-learner" target="_blank" rel="noreferrer">British Council 的词汇学习建议</a>；后续主动回忆与重复使用，参考 <a href="https://www.teachingenglish.org.uk/professional-development/teachers/knowing-subject/remembering-vocabulary" target="_blank" rel="noreferrer">Remembering vocabulary</a>。每日词量、时间与复习间隔是本课的可调整安排。</p></section></div>`;
   }
   function download(name,content) {
     const url=URL.createObjectURL(new Blob([content],{type:'application/json;charset=utf-8'}));const link=document.createElement('a');link.href=url;link.download=name;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1000);
@@ -218,7 +221,7 @@
     try {
       if(file.size>2000000)throw new Error('文件过大');
       const imported=JSON.parse(await file.text());
-      if(!E.validateState(imported,ids))throw new Error('这不是有效的 LexiLab 进度文件');
+      if(!E.validateState(imported,ids,D.days.length))throw new Error('这不是有效的 LexiLab 进度文件');
       // Verify task text against the bundled course, rather than trusting imported answer strings.
       if(imported.active?.queue.some(q=>![byId[q.itemId].word,byId[q.itemId].phrase,byId[q.itemId].sentence].includes(q.target)))throw new Error('练习内容与本课程不一致');
       if(!confirm('导入会替换当前浏览器中的学习进度。建议先导出当前进度备份。继续导入吗？'))return;
@@ -252,5 +255,7 @@
     if(a.seconds%5===0)save();
   },1000);
   if('speechSynthesis'in window)speechSynthesis.getVoices();
+  $('.nav-count').textContent=D.items.length;
+  $('.header-pill').textContent=`${D.weeks.length} 周学习计划`;
   setView('course');
 })();

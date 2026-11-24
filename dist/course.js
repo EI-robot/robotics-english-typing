@@ -131,8 +131,17 @@ acknowledge|v.|承认并说明|acknowledge a limitation|We acknowledge a limitat
     {title:'进入控制与灵巧操作', subtitle:'闭环、轨迹与接触', color:'#8653b5'},
     {title:'阅读论文，讨论实验', subtitle:'评估、论证与研究表达', color:'#b15a23'}
   ];
+  const professional = typeof module!=='undefined'&&module.exports ? require('./professional-vocabulary.js') : root.ProfessionalVocabulary;
+  for (const week of professional) {
+    weeks.push({title:week.title,subtitle:week.subtitle,color:week.color});
+    for (const [title, rows] of week.lessons) {
+      raw.push(rows);
+      const targets=rows.split('\n').map(row=>row.split('|')[0]);
+      themes.push([title,`围绕“${title}”写 30 至 60 词的工程说明，至少使用 ${targets.slice(0,3).join('、')} 中的 3 个词。说明任务条件或一项限制，避免只照抄例句。`]);
+    }
+  }
   const items = [], days = [];
-  for (let week = 0; week < 4; week++) {
+  for (let week = 0; week < weeks.length; week++) {
     for (let weekday = 0; weekday < 5; weekday++) {
       const index = week * 5 + weekday;
       const dayItems = raw[index].split('\n').map((row, j) => {
@@ -144,7 +153,7 @@ acknowledge|v.|承认并说明|acknowledge a limitation|We acknowledge a limitat
     }
     const weekItems = items.filter(i => i.week === week + 1);
     days.push({number:week * 7 + 6, week:week + 1, title:'复习与迁移', prompt:`从本周词汇中选 5 个，写 50 至 80 词，描述一个真实或假想的工程问题。至少改写一个例句，不要只照抄。`, items:[], pool:weekItems.map(i=>i.id), review:true});
-    days.push({number:week * 7 + 7, week:week + 1, title:week === 3 ? '结课自测与下一步' : '每周自测与复述', prompt:week === 3 ? '不看例句，用 60 至 90 词说明：我的研究方向、一个问题、评估方法及局限。尽量用到不同周的 8 个词，再朗读 60 秒。' : '不看例句，用 50 至 80 词复述本周学到的一项方法。至少用到 5 个目标词，最后朗读 60 秒。', items:[], pool:weekItems.map(i=>i.id), review:true});
+    days.push({number:week * 7 + 7, week:week + 1, title:week === weeks.length-1 ? '结课自测与下一步' : '每周自测与复述', prompt:week === weeks.length-1 ? '不看例句，用 60 至 90 词说明：我的研究方向、一个问题、评估方法及局限。尽量用到不同周的 8 个词，再朗读 60 秒。' : '不看例句，用 50 至 80 词复述本周学到的一项方法。至少用到 5 个目标词，最后朗读 60 秒。', items:[], pool:weekItems.map(i=>i.id), review:true});
   }
   const data = {weeks, days, items};
   if (typeof module !== 'undefined' && module.exports) module.exports = data;
